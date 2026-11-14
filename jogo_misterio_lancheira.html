@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O Mistério da Lancheira Desaparecida</title>
+<style>
+:root{--ink:#203047;--muted:#63738a;--paper:#fffdf8;--bg:#edf2f7;--blue:#315b86;--gold:#f2bd4b;--green:#287a5b;--red:#b84b4b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#e9f0f8,#f8f2e6);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}
+header{background:#203b5b;color:white;padding:28px 18px;text-align:center}
+header .tag{display:inline-block;border:1px solid #8fa8c3;border-radius:99px;padding:5px 12px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+h1{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.2rem);margin:12px 0 6px}header p{margin:0;color:#d8e4f1}
+main{max-width:980px;margin:24px auto;padding:0 16px 60px}
+.panel{background:var(--paper);border:1px solid #e1e5e9;border-radius:18px;padding:22px;margin:16px 0;box-shadow:0 8px 24px #233c5610}
+.topline{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.progress{height:9px;background:#e7ebef;border-radius:99px;overflow:hidden;margin:14px 0 5px}.progress span{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+.small{color:var(--muted);font-size:.92rem}.stage{display:none}.stage.active{display:block}
+h2{font-family:Georgia,serif;margin:4px 0 10px;font-size:1.7rem}h3{margin:12px 0 8px}
+button{border:0;border-radius:11px;background:var(--blue);color:white;padding:12px 17px;font-weight:650;font-size:1rem;cursor:pointer}
+button:hover{filter:brightness(1.08)}button.secondary{background:#e8edf3;color:var(--ink)}button.gold{background:var(--gold);color:#342a15}
+button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.choice{display:block;width:100%;text-align:left;background:white;color:var(--ink);border:1.5px solid #d6dee7;margin:9px 0;padding:13px 15px}
+.choice.selected{border-color:var(--blue);background:#edf4fb}.choice.correct{border-color:var(--green);background:#eaf6ef}.choice.wrong{border-color:var(--red);background:#fff0ef}
+.feedback{padding:12px 14px;border-radius:10px;margin-top:12px;display:none}.feedback.show{display:block}.feedback.ok{background:#eaf6ef;color:#205f45}.feedback.no{background:#fff0ef;color:#943c3c}
+table{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:12px}th,td{padding:9px 8px;border-bottom:1px solid #e6e9ed;text-align:left}th{background:#eef2f6}
+.tablewrap{overflow-x:auto}.suspect{transition:opacity .2s}.suspect.out{opacity:.25}
+.cluebox{background:#f1f5f9;border-radius:12px;padding:14px;margin:14px 0}
+.binary{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.letter{border:1px solid #d9e0e8;background:white;border-radius:10px;padding:8px;text-align:center;min-width:64px}
+.pixel{display:grid;grid-template-columns:repeat(5,20px);gap:3px;margin:5px auto}.pixel i{width:20px;height:20px;background:#fff;border:1px solid #d7dde5;border-radius:3px}.pixel i.on{background:#1d2633}
+input[type=text]{padding:12px;border:1.5px solid #cbd5df;border-radius:10px;font-size:1rem;max-width:100%;width:260px;text-transform:uppercase}
+input:focus{outline:3px solid #c5d9ed}
+.score{font-weight:700;background:#fff3d4;border-radius:99px;padding:7px 12px}
+footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:22px}
+@media(max-width:600px){.panel{padding:17px}th,td{font-size:.82rem;padding:7px 5px}.pixel{grid-template-columns:repeat(5,16px)}.pixel i{width:16px;height:16px}}
+</style>
+</head>
+<body>
+<header>
+ <span class="tag">Missão de investigação</span>
+ <h1>O Mistério da Lancheira Desaparecida</h1>
+ <p>Um caso para resolver. Quatro pistas. Um culpado.</p>
+</header>
+<main>
+ <section class="panel">
+  <div class="topline"><strong>📁 Dossier do caso</strong><span class="score">⭐ Pontos: <b id="score">0</b></span></div>
+  <p>A Mrs Jones guardou o almoço especial no frigorífico da sala dos professores. Quando chegou a hora de almoçar… a lancheira tinha desaparecido! Analisa as pistas, elimina suspeitos e descobre quem foi.</p>
+  <div class="progress"><span id="bar"></span></div>
+  <div class="small" id="progressText">Missão por iniciar</div>
+ </section>
+
+ <section class="panel stage active" id="stage0">
+  <h2>🕵️ Começa a investigação</h2>
+  <p>És o/a detetive encarregado/a do caso. Há 16 funcionários na lista de suspeitos. Cada desafio revela uma característica da pessoa responsável.</p>
+  <div class="cluebox"><b>Objetivo:</b> descobrir o género, a cor dos olhos, a cor do cabelo e a disciplina que a pessoa ensina.</div>
+  <button onclick="go(1)">Abrir o primeiro envelope →</button>
+ </section>
+
+ <section class="panel stage" id="stage1">
+  <div class="small">PISTA 1 DE 4 · ORIENTAÇÃO E PALAVRAS</div>
+  <h2>🧭 O percurso misterioso</h2>
+  <p>Segue mentalmente as instruções do mapa original: avança, vira à direita ou à esquerda e regista os números por onde passas. Depois, usa a tabela para reconstruir a mensagem.</p>
+  <div class="cluebox"><b>Instruções do percurso</b><br>Avança 3, vira à direita 90°, avança 4, vira à esquerda 90°, avança 4, vira à esquerda 90°, avança 2, vira à direita 90°, avança 1, vira à direita 90°, avança 4, vira à direita 90° e avança 3.</div>
+  <p><b>Qual é a mensagem revelada pela pista?</b></p>
+  <button class="choice" onclick="answer(1,this,false)">O culpado é do sexo masculino.</button>
+  <button class="choice" onclick="answer(1,this,true)">O culpado não é do sexo masculino.</button>
+  <button class="choice" onclick="answer(1,this,false)">O culpado é do sexo feminino e tem olhos azuis.</button>
+  <div class="feedback" id="fb1"></div>
+ </section>
+
+ <section class="panel stage" id="stage2">
+  <div class="small">PISTA 2 DE 4 · DETEÇÃO DE ERROS</div>
+  <h2>👁️ As sequências de símbolos</h2>
+  <p>Nas seis sequências do desafio original existe um símbolo incorreto em cada uma. Ao identificar o primeiro erro de cada sequência, obténs as palavras da segunda pista.</p>
+  <div class="cluebox">Palavras encontradas: <b>THE CULPRIT DOESN'T HAVE BLUE EYES</b></div>
+  <p><b>O que descobriste sobre os olhos do culpado?</b></p>
+  <button class="choice" onclick="answer(2,this,false)">Tem olhos azuis.</button>
+  <button class="choice" onclick="answer(2,this,true)">Não tem olhos azuis.</button>
+  <button class="choice" onclick="answer(2,this,false)">Tem olhos castanhos.</button>
+  <div class="feedback" id="fb2"></div>
+ </section>
+
+ <section class="panel stage" id="stage3">
+  <div class="small">PISTA 3 DE 4 · CÓDIGO BINÁRIO</div>
+  <h2>💻 Descobre a cor do cabelo</h2>
+  <p>Converte cada linha de código binário numa imagem: <b>1</b> representa um quadrado preto e <b>0</b> representa um quadrado branco. As seis imagens formam uma palavra.</p>
+  <div class="binary" id="binary"></div>
+  <label for="hair"><b>Que cor de cabelo forma a palavra?</b></label><br><br>
+  <input id="hair" type="text" placeholder="Escreve a cor" autocomplete="off">
+  <button class="gold" onclick="checkText(3,'BLONDE','fb3')">Descodificar</button>
+  <div class="feedback" id="fb3"></div>
+ </section>
+
+ <section class="panel stage" id="stage4">
+  <div class="small">PISTA 4 DE 4 · CÓDIGO ASCII BINÁRIO</div>
+  <h2>📡 A disciplina secreta</h2>
+  <p>Usa a tabela de conversão do dossier para transformar cada grupo de 8 bits numa letra.</p>
+  <div class="cluebox"><b>Código:</b><br><span style="font-family:monospace;letter-spacing:.13em;line-height:2">01010011&nbsp; 01000011&nbsp; 01001001&nbsp; 01000101&nbsp; 01001110<br>01000011&nbsp; 01000101</span></div>
+  <details><summary>Consultar a tabela de letras (A–Z)</summary><p class="small">Cada letra corresponde a um código binário de 8 bits. Por exemplo, 01000001 = A; 01000010 = B; 01000011 = C. Continua a sequência para descodificar os restantes grupos.</p></details>
+  <br><label for="subject"><b>Que disciplina ensina o culpado?</b></label><br><br>
+  <input id="subject" type="text" placeholder="Escreve a disciplina" autocomplete="off">
+  <button class="gold" onclick="checkText(4,'SCIENCE','fb4')">Descodificar</button>
+  <div class="feedback" id="fb4"></div>
+ </section>
+
+ <section class="panel stage" id="stage5">
+  <div class="small">QUADRO DE SUSPEITOS</div>
+  <h2>📋 Cruza as pistas</h2>
+  <p>As pistas recolhidas indicam: <b>não é homem, não tem olhos azuis, tem cabelo loiro e ensina Ciências.</b> Consulta a lista e seleciona a pessoa que corresponde a todas as características.</p>
+  <div class="tablewrap"><table><thead><tr><th>Nome</th><th>Idade</th><th>Disciplina</th><th>Olhos</th><th>Cabelo</th></tr></thead><tbody id="suspects"></tbody></table></div>
+  <p><b>Quem roubou a lancheira?</b></p>
+  <div id="finalChoices"></div>
+  <div class="feedback" id="fb5"></div>
+ </section>
+
+ <section class="panel stage" id="stage6">
+  <h2>🏆 Caso encerrado!</h2>
+  <p style="font-size:1.2rem">A responsável pelo desaparecimento da lancheira é…</p>
+  <h1 style="color:var(--green)">Mrs Kelly!</h1>
+  <p>As quatro pistas apontavam para uma mulher, sem olhos azuis, com cabelo loiro, que ensina Ciências. Mrs Kelly corresponde a todas as características.</p>
+  <div class="cluebox">🎉 Excelente trabalho, detetive! A lancheira da Mrs Jones foi encontrada e o mistério está resolvido.</div>
+  <p><b>Pontuação final: <span id="finalScore"></span></b></p>
+  <button onclick="restart()">↻ Jogar novamente</button>
+ </section>
+ <footer>Jogo educativo adaptado de “The Mystery of the Missing Lunch Box”.</footer>
+</main>
+<script>
+const staff=[
+["Mr Smith",29,"Matemática","Azuis","Castanho","M"],["Miss Taylor",32,"Inglês","Castanhos","Castanho","F"],
+["Mrs Kelly",33,"Ciências","Castanhos","Loiro","F"],["Mr Morgan",55,"Inglês","Verdes","Grisalho","M"],
+["Mrs Patel",28,"Educação Física","Azuis","Loiro","F"],["Mr Singh",35,"Ciências","Verdes","Castanho","M"],
+["Miss Lewis",33,"Inglês","Castanhos","Loiro","F"],["Mr Fraser",29,"História","Castanhos","Ruivo","M"],
+["Mrs Harris",31,"Inglês","Castanhos","Castanho","F"],["Miss Brown",55,"Geografia","Azuis","Grisalho","F"],
+["Mr Johnson",28,"Educação Física","Azuis","Loiro","M"],["Mr Williams",35,"Matemática","Verdes","Castanho","M"],
+["Mrs Clark",28,"História","Azuis","Ruivo","F"],["Miss Anderson",32,"Geografia","Castanhos","Castanho","F"],
+["Mr Lee",29,"Matemática","Verdes","Castanho","M"],["Mr Martin",33,"Ciências","Azuis","Ruivo","M"]
+];
+let score=0,done={};
+function go(n){document.querySelectorAll('.stage').forEach(x=>x.classList.remove('active'));document.getElementById('stage'+n).classList.add('active');update()}
+function update(){let count=Object.keys(done).length;document.getElementById('score').textContent=score;document.getElementById('bar').style.width=(count/5*100)+'%';document.getElementById('progressText').textContent=count+'/5 desafios concluídos'}
+function award(n){if(!done[n]){done[n]=true;score+=10}update()}
+function answer(n,el,correct){if(done[n])return;let fb=document.getElementById('fb'+n);if(correct){el.classList.add('correct');fb.className='feedback show ok';fb.textContent='Correto! Pista registada. +10 pontos.';award(n);setTimeout(()=>go(n+1),1100)}else{el.classList.add('wrong');fb.className='feedback show no';fb.textContent='Ainda não. Revê a pista e tenta novamente.'}}
+const patterns=["11110,10001,11110,10001,11110","10000,10000,10000,10000,11111","11111,10001,10001,10001,11111","10001,11001,10101,10011,10001","11110,10001,10001,10001,11110","11111,10000,11111,10000,11111"];
+document.getElementById('binary').innerHTML=patterns.map((p,i)=>'<div class="letter"><div class="pixel">'+p.split(',').join('').split('').map(x=>'<i class="'+(x==='1'?'on':'')+'"></i>').join('')+'</div><small>Imagem '+(i+1)+'</small></div>').join('');
+function checkText(n,expected,fbid){if(done[n])return;let val=document.getElementById(n===3?'hair':'subject').value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();let fb=document.getElementById(fbid);if(val===expected){fb.className='feedback show ok';fb.textContent='Muito bem! A palavra está correta. +10 pontos.';award(n);setTimeout(()=>{if(n===3)go(4);else{buildSuspects();go(5)}},1100)}else{fb.className='feedback show no';fb.textContent='Essa não é a palavra. Observa novamente os códigos.'}}
+function buildSuspects(){let body=document.getElementById('suspects');body.innerHTML=staff.map(s=>`<tr class="suspect"><td>${s[0]}</td><td>${s[1]}</td><td>${s[2]}</td><td>${s[3]}</td><td>${s[4]}</td></tr>`).join('');let names=['Mrs Kelly','Mrs Patel','Miss Lewis','Mrs Harris'];document.getElementById('finalChoices').innerHTML=names.map(n=>`<button class="choice" onclick="finalPick(this,'${n}')">${n}</button>`).join('')}
+function finalPick(el,name){if(done[5])return;let fb=document.getElementById('fb5');if(name==='Mrs Kelly'){el.classList.add('correct');fb.className='feedback show ok';fb.textContent='Acertaste! Todas as pistas coincidem com Mrs Kelly. +10 pontos.';award(5);setTimeout(()=>{document.getElementById('finalScore').textContent=score+' pontos';go(6)},1200)}else{el.classList.add('wrong');fb.className='feedback show no';fb.textContent='Essa pessoa não corresponde a todas as pistas. Volta a cruzar as informações.'}}
+function restart(){score=0;done={};document.querySelectorAll('.feedback').forEach(x=>{x.className='feedback';x.textContent=''});document.querySelectorAll('.choice').forEach(x=>x.classList.remove('wrong','correct'));document.getElementById('hair').value='';document.getElementById('subject').value='';go(0)}
+update();
+</script>
+</body>
+</html>
